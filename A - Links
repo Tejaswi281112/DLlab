@@ -1,0 +1,52 @@
+1.	Basics of Tensor Flow
+
+https://colab.research.google.com/drive/1y09VAvS6l0uXpvVNkNnC6NsFrQm30G9v?usp=sharing
+
+2.	MLP – In Classification Iris
+
+https://colab.research.google.com/drive/1dMZ1ZSv6RB3K6giRYRQyBjwcy2RzyEMn?usp=sharing
+'''
+import zipfile
+import os
+
+# Define the path
+zip_path = "sample_data/Iris.zip"
+extract_path = "sample_data/extracted"
+
+# Extract the ZIP file
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_path)
+
+# Find the extracted CSV file (Assuming only one CSV inside)
+csv_files = [f for f in os.listdir(extract_path) if f.endswith('.csv')]
+if not csv_files:
+    raise FileNotFoundError("No CSV file found in the extracted archive.")
+csv_file_path = os.path.join(extract_path, csv_files[0])
+
+df = pd.read_csv(csv_file_path)
+'''
+
+
+3.	Set-11:  MLP Regression – House Price Prediction
+
+https://colab.research.google.com/drive/1jnZ5_W8tDuNVo3Vez5UiSzRPCMJCztlb?usp=sharing
+
+4.	Image Recognition without CNN (MINIST)
+
+https://colab.research.google.com/drive/1yLLKFw0QTQEI2DIhWENI8de4DVD1BT7g?usp=sharing
+
+
+5.	a.Basic Buliding Blocks of CNN
+https://colab.research.google.com/drive/1G2Bj2Mpf3X3MYePSodqcqFTM9Sm_laKm?usp=sharing
+5 . Dog Cat Classification CNN
+https://colab.research.google.com/drive/168rBGWUc4e6LTQ9vTYgx-Bm2UX9R7iWC?usp=sharing
+6.	Object Detection - YOLO
+https://colab.research.google.com/drive/11w-z-lDcnhJ4NfjfiyfS7o3ufHoC3rHF?usp=sharing
+7.	RNN for time Serirs data
+https://colab.research.google.com/drive/1LaV5szdpJJ26C-FemWLN36M6YbqjoWcY?usp=sharing
+8.	Seq2seq – Next Word Prediction
+https://colab.research.google.com/drive/1cPTd2zcvEPCqvv8hjyHW8Yd8F3IdOR8I?usp=sharing
+9.	Encoder Decoder RNN
+https://colab.research.google.com/drive/1UI5uDIo2OWy2oKH0CYNIiM9hbzqlc1rG?usp=sharing
+
+
