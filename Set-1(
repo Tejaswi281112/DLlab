@@ -1,0 +1,90 @@
+# (i) Import all necessary libraries
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+
+# (ii) Construct the model using Sequential API
+model = Sequential([
+    Dense(4, activation='tanh', name='layer1_tanh'),  # First hidden layer with 4 units
+    Dense(2, activation='tanh', name='layer2_tanh'),  # Second hidden layer with 2 units
+    Dense(1, activation='sigmoid', name='layer3_sigmoid')  # Output layer with 1 unit
+])
+
+# (iii) Compile the model
+model.compile(
+    optimizer=Adam(),  # (a) Adam optimizer
+    loss='binary_crossentropy',  # (b) Appropriate loss for binary classification
+    metrics=['accuracy']  # (c) Accuracy metric for binary classification
+)
+
+# Print the model summary
+model.summary()
+
+
+
+================================================================
+===============================================================
+==================================================================
+
+
+# (i) Import all necessary libraries
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.utils import plot_model
+import matplotlib.pyplot as plt
+
+# (ii) Construct the model using Sequential API
+model = Sequential([
+    Dense(4, activation='tanh', input_shape=(3,), name='layer1_tanh'),
+    Dense(2, activation='tanh', name='layer2_tanh'),
+    Dense(1, activation='sigmoid', name='layer3_sigmoid')
+])
+
+# (iii) Compile the model
+model.compile(
+    optimizer=Adam(learning_rate=0.001),
+    loss='binary_crossentropy',
+    metrics=['accuracy', 'AUC']  # Added AUC metric for binary classification
+)
+
+# Print model summary
+model.summary()
+
+# Visualize model architecture
+plot_model(model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
+
+# Generate dummy data for demonstration
+import numpy as np
+X = np.random.rand(100, 3)  # 100 samples, 3 features
+y = np.random.randint(0, 2, size=(100, 1))  # Binary labels
+
+# Train the model
+history = model.fit(
+    X, y,
+    epochs=50,
+    batch_size=8,
+    validation_split=0.2,
+    verbose=1
+)
+
+# Plot training history
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Accuracy over Epochs')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Loss over Epochs')
+plt.legend()
+plt.show()
+
+# Make predictions
+predictions = model.predict(X[:5])
+print("\nSample predictions:")
+for i, (pred, actual) in enumerate(zip(predictions, y[:5])):
+    print(f"Sample {i+1}: Predicted {pred[0]:.4f} | Actual {actual[0]}")
