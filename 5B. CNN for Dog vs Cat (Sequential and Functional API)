@@ -1,0 +1,162 @@
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping
+import matplotlib.pyplot as plt
+import zipfile
+import os
+from google.colab import drive
+python
+Copy
+Edit
+!wget -O cats_and_dogs_filtered.zip https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip
+python
+Copy
+Edit
+zip_path = "/content/cats_and_dogs_filter.zip"
+extract_path = "/content/cats_and_dogs_filter"
+
+with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    zip_ref.extractall("/content/")
+python
+Copy
+Edit
+print("Extra contents:", os.listdir(extract_path))
+python
+Copy
+Edit
+base_dir = '/content/cats_and_dogs_filtered'
+train_dir = os.path.join(base_dir, 'train')
+validation_dir = os.path.join(base_dir, 'validation')
+python
+Copy
+Edit
+IMAGE_SIZE = (150, 150)
+BATCH_SIZE = 32
+EPOCHS = 20
+python
+Copy
+Edit
+train_datagen = ImageDataGenerator(
+    rescale=1./255,
+    rotation_range=40,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    fill_mode='nearest'
+)
+python
+Copy
+Edit
+validation_datagen = ImageDataGenerator(rescale=1./255)
+python
+Copy
+Edit
+train_generator = train_datagen.flow_from_directory(
+    train_dir,
+    target_size=IMAGE_SIZE,
+    batch_size=BATCH_SIZE,
+    class_mode='binary'
+)
+python
+Copy
+Edit
+validation_generator = validation_datagen.flow_from_directory(
+    validation_dir,
+    target_size=IMAGE_SIZE,
+    batch_size=BATCH_SIZE,
+    class_mode='binary'
+)
+python
+Copy
+Edit
+model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
+    MaxPooling2D(2, 2),
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D(2, 2),
+    Flatten(),
+    Dropout(0.5),
+    Dense(512, activation='relu'),
+    Dense(1, activation='sigmoid')
+])
+python
+Copy
+Edit
+model.compile(
+    optimizer=tf.keras.optimizers.RMSprop(learning_rate=1e-4),
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+model.summary()
+python
+Copy
+Edit
+early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+python
+Copy
+Edit
+history = model.fit(
+    train_generator,
+    steps_per_epoch=train_generator.samples // BATCH_SIZE,
+    epochs=EPOCHS,
+    validation_data=validation_generator,
+    validation_steps=validation_generator.samples // BATCH_SIZE,
+    callbacks=[early_stopping]
+)
+python
+Copy
+Edit
+def plot_history(history):
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    epochs = range(1, len(acc) + 1)
+    
+    plt.figure(figsize=(12, 5))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs, acc, 'bo', label='Training acc')
+    plt.plot(epochs, val_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+    plt.show()
+python
+Copy
+Edit
+plot_history(history)
+python
+Copy
+Edit
+model.save('dog_cat_classifier.h5')
+python
+Copy
+Edit
+def predict_image(image_path):
+    img = tf.keras.preprocessing.image.load_img(image_path, target_size=IMAGE_SIZE)
+    img_array = tf.keras.preprocessing.image.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)
+    img_array /= 255.0
+
+    prediction = model.predict(img_array)
+    if prediction < 0.5:
+        print(f"Predicted: Cat ({100*(1-prediction[0][0]):.2f}% confidence)")
+    else:
+        print(f"Predicted: Dog ({100*prediction[0][0]:.2f}% confidence)")
+
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
