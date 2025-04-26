@@ -1,0 +1,44 @@
+(i) Construct a vector consisting of the first 24 integers using NumPy.
+python
+Copy
+Edit
+import numpy as np
+vector = np.arange(1, 25)
+print("Vector:", vector)
+(ii) Convert that NumPy vector into a tensor of rank 3.
+python
+Copy
+Edit
+import tensorflow as tf
+tensor_3d = tf.convert_to_tensor(vector, dtype=tf.int32)
+tensor_3d = tf.reshape(tensor_3d, (2, 3, 4))
+print("3D Tensor:\n", tensor_3d)
+(iii) Observations on how the elements of the rank 3 tensor vector got rearranged.
+text
+Copy
+Edit
+The tensor has 2 matrices of shape (3, 4). The first 12 elements fill the first matrix, and the next 12 elements fill the second matrix.
+(iv) Get the version of TensorFlow running on your machine.
+python
+Copy
+Edit
+print("TensorFlow Version:", tf.__version__)
+(v) Get the type, number of physical devices available on your machine, and test whether the GPU is available.
+python
+Copy
+Edit
+physical_devices = tf.config.list_physical_devices()
+print("Number of Physical Devices:", len(physical_devices))
+for device in physical_devices:
+    print(device)
+
+gpu_available = tf.config.list_physical_devices('GPU')
+if gpu_available:
+    print("GPU Available:", gpu_available[0].name)
+else:
+    print("No GPU available.")
+(vi) What is the need for setting a seed value in any random number generation?
+text
+Copy
+Edit
+Setting a seed ensures reproducibility of random number generation, which is important for consistency in experiments and debugging.
