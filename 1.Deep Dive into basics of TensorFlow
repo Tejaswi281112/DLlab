@@ -1,0 +1,35 @@
+import tensorflow as tf
+print(tf.__version__)
+
+import tensorflow as tf
+devices = tf.config.list_physical_devices()
+print("Number of devices available: ", len(devices))
+for device in devices:
+    print(device)
+    if "GPU" in device.device_type:
+        print("GPU is available")
+    else:
+        print("GPU is not available")
+
+import tensorflow as tf
+tf.random.set_seed(42)
+
+tensor1 = tf.random.normal(shape=(2, 3))
+tensor2 = tf.random.normal(shape=(2, 3))
+print(tensor1)
+print(tensor2)
+print("Are the two tensors identical? ", tf.reduce_all(tensor1 == tensor2))
+
+import tensorflow as tf
+input_tensor = tf.constant([[1, 2], [3, 4], [5, 6], [7, 8]])
+
+shuffled_tensor = tf.random.shuffle(input_tensor)
+print("Shuffled tensor without seed:\n", shuffled_tensor.numpy())
+
+import numpy as np
+
+import tensorflow as tf
+
+vector = np.arange(1, 25)
+tensor_rank3 = tf.reshape(vector, shape=(2, 3, 4))
+print("Reshaped Tensor (Rank 3):\n", tensor_rank3.numpy())
