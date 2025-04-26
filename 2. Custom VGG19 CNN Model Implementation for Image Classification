@@ -1,0 +1,52 @@
+# Build the custom VGG19 CNN model
+def vgg19_cnn_model(input_shape=(32, 32, 3), num_classes=10):
+    model = Sequential()
+    
+    # Block 1
+    model.add(Conv2D(64, (3, 3), activation='relu', padding='same', input_shape=input_shape))
+    model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    
+    # Block 2
+    model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    
+    # Block 3
+    model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    
+    # Block 4
+    model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    
+    # Block 5
+    model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
+    model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+    
+    # Fully connected layers
+    model.add(Flatten())
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(num_classes, activation='softmax'))
+    
+    return model
+
+# Instantiate the custom VGG19 CNN model
+model_vgg19 = vgg19_cnn_model(input_shape=(32, 32, 3), num_classes=10)
+
+# Compile the model
+model_vgg19.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model
+history_vgg19 = model_vgg19.fit(x_train, y_train, epochs=10, batch_size=64, validation_data=(x_test, y_test))
+
+# Evaluate the model
+score_vgg19, accuracy_vgg19 = model_vgg19.evaluate(x_test, y_test, batch_size=64)
+print(f'VGG19 CNN Test accuracy: {accuracy_vgg19:.4f}')
