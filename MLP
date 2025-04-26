@@ -1,0 +1,58 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+import seaborn as sns
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+df = pd.read_csv('/content/sale_data/Iris.csv')
+df.head()
+
+df.isnull().sum()
+df.duplicated().sum()
+
+le = LabelEncoder()
+df['Species'] = le.fit_transform(df['Species'])
+species_name = le.classes_
+
+X= df.drop(columns=['Id', 'Species'])
+y = df['Species']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, shuffle=True, random_state=7)
+
+sc = StandardScaler()
+
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+y_train = tf.keras.utils.to_categorical(y_train, num_classes=3)
+
+def get_models():
+    model = Sequential([
+        Dense(32, input_shape=(4,), activation='relu'),
+        Dense(32, activation='relu'),
+        Dropout(0.5),
+        Dense(3, activation='softmax')
+    ])
+    return model
+
+model = get_models()
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.summary()
+
+model.fit(X_train, y_train, epochs=50, verbose=2)
+
+prediction = model.predict(X_test)
+prediction = np.argmax(prediction, axis=-1)
+
+acury = accuracy_score(y_test, prediction)
+cm = confusion_matrix(y_test, prediction)
+
+ax = sns.heatmap(cm, annot=True, fmt='d', cmap='Reds', xticklabels=species_name, yticklabels=species_name)
+ax.set_title("Iris Dataset Prediction")
+
+ax.set_xlabel('Prediction')
+ax.set_ylabel('Actual')
+
