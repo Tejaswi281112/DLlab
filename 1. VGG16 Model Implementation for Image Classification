@@ -1,0 +1,43 @@
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Dropout
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.utils import to_categorical
+
+# Load the CIFAR-10 dataset (replace with your custom dataset)
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+# Normalize the images to the range [0, 1]
+x_train = x_train.astype('float32') / 255.0
+x_test = x_test.astype('float32') / 255.0
+
+# One-hot encode the labels
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+# Load VGG16 model without the top layers (pre-trained ImageNet weights)
+vgg16_model = VGG16(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+
+# Freeze the layers of VGG16
+for layer in vgg16_model.layers:
+    layer.trainable = False
+
+# Construct the model using VGG16 as the base
+model_vgg16 = Sequential()
+model_vgg16.add(vgg16_model)
+model_vgg16.add(Flatten())
+model_vgg16.add(Dense(512, activation='relu'))
+model_vgg16.add(Dropout(0.5))
+model_vgg16.add(Dense(10, activation='softmax'))  # 10 classes for CIFAR-10
+
+# Compile the model
+model_vgg16.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model
+history_vgg16 = model_vgg16.fit(x_train, y_train, epochs=10, batch_size=64, validation_data=(x_test, y_test))
+
+# Evaluate the model
+score_vgg16, accuracy_vgg16 = model_vgg16.evaluate(x_test, y_test, batch_size=64)
+print(f'VGG16 Test accuracy: {accuracy_vgg16:.4f}')
