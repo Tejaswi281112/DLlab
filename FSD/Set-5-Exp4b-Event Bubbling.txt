@@ -1,0 +1,104 @@
+Event Bubbling
+
+
+
+<!--demonstrate event capturing and bubbling with javascript-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bubbling</title>
+    <style>
+        /*general body styling*/
+        body {
+            font-family: 'Arial',sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        
+        /*styling for heading*/
+        h2 {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /*styling for the parent contrainer*/
+        #parent{
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #parent:hover {
+            background-color: #e8f0fe;
+            transform: scale(1.05);
+        }
+
+       
+        #child {
+            padding: 15px;
+            background-color: #e74c3c;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #child:hover{
+            background-color: #c0392b;
+            transform: scale(1.1);
+        }
+
+       
+        p {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: rgb(1, 1, 1);
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Event Bubbling</h2>
+    <div id="parent">
+        <div id="child">Click Me!</div>
+    </div>
+
+    <script>
+        //Bubbling events (default behaviour)
+        document.getElementById('parent').addEventListener('click',function (){
+            alert('Parent Div Clicked (Bubbling)');
+        });
+
+        document.getElementById('child').addEventListener('click',function (){
+            alert('Child Div Clicked (Bubbling)');
+        });
+    </script>
+    <div class="watermark">Devarapalli Tejaswi (22BQ1A4237)</div>
+</body>
+</html>

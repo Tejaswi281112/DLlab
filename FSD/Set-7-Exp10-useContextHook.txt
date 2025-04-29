@@ -1,0 +1,86 @@
+useContextHook
+
+
+
+useContextHook.js
+---------------------------
+import React, { useState, useContext, createContext } from 'react';
+
+const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+
+export const ThemeComponent = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  const themeComponentStyle = {
+    background: theme === 'light' ? '#fff' : '#333',
+    color: theme === 'light' ? '#333' : '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    padding: '20px',
+    margin: '20px 0',
+  };
+
+  return (
+    <div style={themeComponentStyle}>
+      <h2>Themed Component</h2>
+      <p>Current Theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </div>
+  );
+};
+
+
+
+
+
+=================
+=======================
+======================
+
+App.js
+----------------------import React from 'react';
+import { ThemeProvider, ThemeComponent } from './useContextHook';
+import { CounterComponent, UserInfoComponent } from './useEventHook';
+import { Watermark } from './useStateHook';
+
+const App = () => {
+  const appStyle = {
+    fontFamily: 'Arial, sans-serif',
+    maxWidth: '600px',
+    margin: 'auto',
+    padding: '20px',
+  };
+
+  return (
+    <ThemeProvider>
+      <div style={{ textAlign: 'center', marginTop: '10px' }}>
+        <h1 style={{ borderBottom: '2px solid orange', color: 'blue' }}>
+          All HOOKS @ Once
+        </h1>
+      </div>
+      <div style={appStyle}>
+        <CounterComponent />
+        <ThemeComponent />
+        <UserInfoComponent />
+      </div>
+      <Watermark />
+    </ThemeProvider>
+  );
+};
+
+export default App;

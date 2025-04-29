@@ -1,0 +1,219 @@
+Digital Clock
+
+app.js
+------------------------
+import React, { useState, useEffect } from "react";
+import "./App.css";
+
+const App = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const hours = time.getHours();
+  const minutes = time.getMinutes();
+  const seconds = time.getSeconds();
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12;
+
+  return (
+    <div className="container">
+      <div className="clock-container">
+        {/* Analog Clock */}
+        <div className="analog-clock">
+          {/* Outer and Inner Circles */}
+          <div className="outer-circle"></div>
+          <div className="middle-circle"></div>
+          <div className="inner-circle"></div>
+
+          {/* Clock Hands */}
+          <div
+            className="hand hour-hand"
+            style={{ transform: `rotate(${(hours % 12) * 30 + minutes / 2}deg)` }}
+          ></div>
+          <div
+            className="hand minute-hand"
+            style={{ transform: `rotate(${minutes * 6}deg)` }}
+          ></div>
+          <div
+            className="hand second-hand"
+            style={{ transform: `rotate(${seconds * 6}deg)` }}
+          ></div>
+
+          {/* Clock Numbers */}
+          {[...Array(12)].map((_, i) => {
+            const angle = (i + 1) * 30;
+            const x = 50 + 40 * Math.sin((angle * Math.PI) / 180);
+            const y = 50 - 40 * Math.cos((angle * Math.PI) / 180);
+            return (
+              <div key={i} className="clock-number" style={{ left: `${x}%`, top: `${y}%` }}>
+                {i + 1}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Digital Time in Yellow Circle */}
+        <div className="digital-clock-container">
+          <div className="digital-clock">
+            {formattedHours.toString().padStart(2, "0")}:
+            {minutes.toString().padStart(2, "0")}:
+            {seconds.toString().padStart(2, "0")}
+            <span className="subscript">{ampm}</span>
+          </div>
+        </div>
+        
+      </div>
+      {/* Watermark */}
+      <div className="watermark">Devarapalli Tejaswi (22BQ1A4237)</div>
+    </div>
+  );
+};
+export default App;
+
+
+
+=====================
+=================
+=======================
+
+App.css
+-----------------------
+body {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Clock Container */
+.clock-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 800px;
+}
+
+/* Analog Clock */
+.analog-clock {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: relative;
+  background: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 50px;
+}
+
+/* Outer, Middle, and Inner Circles */
+.outer-circle {
+  width: 100%;
+  height: 100%;
+  border: 5px solid black;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.middle-circle {
+  width: 200px;
+  height: 200px;
+  border: 3px solid yellow;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.inner-circle {
+  width: 15px;
+  height: 15px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 2;
+}
+
+/* Clock Numbers */
+.clock-number {
+  position: absolute;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  transform: translate(-50%, -50%);
+}
+
+/* Clock Hands */
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  transform: translateX(-50%);
+  background: black;
+  border-radius: 5px;
+}
+
+.hour-hand {
+  width: 6px;
+  height: 50px;
+}
+
+.minute-hand {
+  width: 4px;
+  height: 70px;
+}
+
+.second-hand {
+  width: 2px;
+  height: 90px;
+  background: red;
+}
+
+/* Digital Clock inside Yellow Circle */
+.digital-clock-container {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background-color: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.digital-clock {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Subscript for AM/PM */
+.subscript {
+  font-size: 1.2rem;
+  vertical-align: sub;
+}
+
+/* Watermark */
+.watermark {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 14px;
+  color: rgb(18, 18, 18);
+  z-index: 0;
+  pointer-events: none;
+}

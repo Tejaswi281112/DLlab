@@ -1,0 +1,119 @@
+Higher order function
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Higher Order Function</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* Main title styling */
+        h1 {
+            color: #2c3e50;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #14def5;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: rgb(1, 1, 1);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .p {
+            background-color: #ecf0f1;
+            color: #34495e;
+            border-radius: 5px;
+            padding: 10px 20px;
+            width: 80%;
+            max-width: 600px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-container {
+            margin-top: 20px;
+            width: 70%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Higher Order Functions</h1>
+    <div>
+        <button onclick="filterEven()">Filter Even Numbers</button>
+        <button onclick="squareNumbers()">Square Numbers</button>
+        <button onclick="calculateProduct()">Calculate Product</button>
+    </div>
+    <div class="result-container" id="results"></div>
+
+    <script>
+        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        function displayResult(title, result) {
+            console.log(`${title}:`, result);
+            const resultElement = document.createElement('p');
+            resultElement.textContent = `${title}: ${JSON.stringify(result)}`;
+            document.getElementById('results').appendChild(resultElement);
+        }
+
+        function filterEven() {
+            const isEven = num => num % 2 === 0;
+            const filteredNumbers = numbers.filter(isEven);
+            displayResult("Filtered even numbers", filteredNumbers);
+        }
+
+        function squareNumbers() {
+            const square = num => num ** 2;
+            const squaredNumbers = numbers.map(square);
+            displayResult("Squared numbers", squaredNumbers);
+        }
+
+        function calculateProduct() {
+            const multiply = (x, y) => x * y;
+            const product = numbers.reduce(multiply);
+            displayResult("Product of all numbers", product);
+        }
+    </script>
+    <div class="watermark">Tejaswi Devarapalli (22BQ1A4237)</div>
+</body>
+
+</html>

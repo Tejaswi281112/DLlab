@@ -1,0 +1,85 @@
+Counter App
+
+
+App.js
+--------------------------
+import React,{useState} from "react";
+import Button from "./button.jsx";
+import "./style.css";
+export default function App(){
+  const [count,setCount]=useState(0);
+  let incrementCount = () => {
+    setCount(count+1);
+  };
+  let decrementCount = () =>{
+    setCount(count-1);
+  };
+  return(
+    <div className="app">
+      <div>
+        <div className="title-container">
+          <h2> COUNTER REACT APP</h2>
+          <div className="title-underline">
+          </div>
+        </div>
+        <div class="count">
+          <h3>Count</h3>
+          <h1>{count}</h1>
+        </div>
+        <div class="buttons">
+          <Button title={'-'} action={decrementCount} />
+          <Button title={'+'} action={incrementCount} />
+        </div>
+      </div>
+      
+    <div id="watermark">Devarapalli Tejaswi (22BQ1A4237)</div>
+    </div>
+    
+  ) 
+}
+
+
+========================
+=====================
+==========================
+
+App.css
+----------------------------
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

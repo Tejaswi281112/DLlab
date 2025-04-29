@@ -1,0 +1,114 @@
+Array of Objects
+
+App.js
+---------------
+import React, { Component } from 'react';
+import './index.css';
+
+class TableView extends Component {
+  renderTableHeader() {
+    const header = Object.keys(this.props.data[0]);
+    return header.map((key) => <th key={key}>{key}</th>);
+  }
+
+  renderTableData() {
+    return this.props.data.map((item, index) => {
+      const rowStyle = {
+        backgroundColor: index % 2 === 0 ? '#f2f2f2' : 'white', // Alternating background colors
+      };
+
+      return (
+        <tr key={index} style={rowStyle}>
+          {Object.entries(item).map(([key, value], index) => {
+            const cellStyle = {
+              border: '1px solid black',
+              textAlign: key === 'Qualification' ? 'left' : 'center',
+            };
+            return <td key={index} style={cellStyle}>{value}</td>;
+          })}
+        </tr>      );
+    });
+  }
+
+  render() {
+    const tableStyle = {
+      borderCollapse: 'collapse',
+      width: '70%',
+      margin: '20px auto', // Center the table horizontally
+      border: '1px solid blue',
+    };
+    
+    const headerStyle = {
+      backgroundColor: '#3498db',
+    };
+
+    return (
+      <div>        
+        <table style={tableStyle}>
+          <thead style={headerStyle}>
+            <tr>{this.renderTableHeader()}</tr>
+          </thead>
+          <tbody>{this.renderTableData()}</tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+class App extends Component {
+  render() {
+    const data = [
+      { ID: 1, Name: 'KBK', Qualification: 'B.Tech., M.Tech., MBA., DID., (Ph.D)' },
+      { ID: 2, Name: 'TVC', Qualification: '(B.Tech)' },
+      { ID: 3, Name: 'JRP', Qualification: '(B.Tech)' },
+      { ID: 4, Name: 'NBS', Qualification: '(B.Tech)' },
+      { ID: 5, Name: 'KMC', Qualification: '(B.Tech)' },    
+    ];
+
+    return (
+      <div>
+        <h1 style={{ textAlign: 'center', borderBottom: '2px solid darkblue', paddingTop: '20px', marginBottom: '100px' }}>
+          Array of Objects - Table View
+        </h1>      
+        <TableView data={data} />
+        <div className="watermark">
+          <p>Devarapalli Tejaswi (22BQ1A4237)</p>
+        </div>
+      </div>    
+    );
+  }
+}
+
+export default App;
+
+===================
+===============
+====================
+
+index.css
+----------------
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(217, 230, 173);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  /*color: rgba(15, 6, 85, 0.4);*/
+  color: red;
+  font-size: 12px;
+}
+
+

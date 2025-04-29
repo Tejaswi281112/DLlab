@@ -1,0 +1,111 @@
+Drag and Drop
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop</title>
+    <style>
+        body{
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #dragElement {
+            width: 100px;
+            height: 100px;
+            cursor: move;
+            border-radius: 10px;
+            user-select: none;
+            padding: 20px;
+
+           /* margin: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;*/
+        }
+        #dropArea {
+            width: 700px;
+            height: 500px;
+            margin: 20px;
+            border: 2px dashed #2ecc71;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            background-color: #ecf0f1;
+        }
+
+        #dropArea:hover{
+            background-color: #d5d8dc;
+        }
+
+        #dropArea p {
+            margin: 0;
+        }
+
+        .full-size {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: rgb(1, 1, 1);
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="dragElement" draggable="true">
+        <img src="smile2.jpeg" alt="Drag me">
+    </div>
+
+    <div id="dropArea" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <p>Drop here</p>
+    </div>
+
+    <script>
+        var draggedElement;
+
+        function allowDrop(event) {
+            event.preventDefault();
+            var dropArea = event.target;
+
+            dropArea.classList.add("highlight");
+        }
+
+        function drag(event){
+            draggedElement = event.target;
+        }
+
+        function drop(event){
+            event.preventDefault();
+            var dropArea = event.target;
+
+            if (dropArea.id === "dropArea" || dropArea.tagName === "P") {
+                dropArea.innerHTML = ""; 
+            }
+
+            if (draggedElement !== dropArea) {
+                dropArea.appendChild(draggedElement); 
+            }
+
+            draggedElement.classList.add("full-size");
+            dropArea.classList.remove("highlight");
+        }
+
+        document.getElementById("dragElement").addEventListener("dragstart", drag);
+    </script>
+    <div class="watermark">Devarapalli Tejaswi (22BQ1A4237)</div>
+</body>
+</html>

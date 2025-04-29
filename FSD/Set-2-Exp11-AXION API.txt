@@ -1,0 +1,72 @@
+AXION API
+
+App.js
+-----------------
+import "./App.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+function App() {
+  const [fact, setFact] = useState("");
+  const fetchClick = () => {
+    fetchFact()
+  }
+  const axiosClick = () => {
+      fetchFact1()
+    }
+  const fetchFact = () => {
+  fetch("https://catfact.ninja/fact")
+    .then((response) => response.json())
+    .then((data) => setFact(data.fact));
+}
+
+const fetchFact1 = () => {
+    axios.get("https://catfact.ninja/fact").then((response) => {
+    setFact(response.data.fact)
+    });
+  }
+useEffect(() => {
+  fetchFact()
+}, []);
+return (
+  <div className="App">
+    <h2>Press the button for a random cat fact!</h2>
+    <hr />
+    <button onClick= {() => fetchClick()}>Get Cat fact using fetch</button>&nbsp;&nbsp;&nbsp;
+    <button onClick= {() => axiosClick()}>Get Cat fact using axios</button>
+    <p>{fact}</p>
+  </div>
+);
+}
+export default App;
+
+
+
+=======================
+=================
+=====================
+
+App.css
+--------------------------
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@700;500&display=swap');
+.App {
+  font-family: 'Playfair Display', serif;
+  margin: 20px 15vw;
+  }
+  h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 3em;
+  }
+  button {
+  padding: 1em 1.2em;
+  border: none;
+  font-size: 1em;
+  background-color: #131212;
+  color: #ffffff;
+  border-radius:0.5em;
+  cursor: pointer;
+  }
+  button:hover{
+  background-color:#3b3b3b;
+  }
