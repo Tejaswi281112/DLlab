@@ -1,0 +1,181 @@
+Hook
+
+App.js
+-----------------------
+import React, { useState, useContext, useEffect, createContext } from 'react';
+
+const ThemeContext = createContext();
+
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+const ThemedComponent = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  const themedComponentStyle = {
+    background: theme === 'light' ? '#fff' : '#333',
+    color: theme === 'light' ? '#333' : '#fff',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    padding: '20px',
+    margin: '20px 0',
+  };
+
+  return (
+    <div style={themedComponentStyle}>
+      <h2>Themed Component</h2>
+      <p>Current Theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </div>
+  );
+};
+
+const CounterComponent = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = "Hooks";
+  }, [count]);
+
+  const counterStyle = {
+    margin: '20px 0',
+    padding: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+  };
+
+  return (
+    <div style={counterStyle}>
+      <h2>Counter Component</h2>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
+    </div>
+  );
+};
+
+const UserInfoComponent = () => {
+  const [userInfo, setUserInfo] = useState({ name: '', age: 0 });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setUserInfo({ name: 'Devarapalli Tejaswi😎(22BQ1A4237)', age: 19 });
+    }, 1000);
+  }, []);
+
+  const userInfoStyle = {
+    margin: '20px 0',
+    padding: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+  };
+
+  return (
+    <div style={userInfoStyle}>
+      <h2>User Info Component</h2>
+      <p>Name: {userInfo.name}</p>
+      <p>Age: {userInfo.age}</p>
+    </div>
+  );
+};
+
+const App = () => {
+  const appStyle = {
+    fontFamily: 'Arial, sans-serif',
+    maxWidth: '600px',
+    margin: 'auto',
+    padding: '20px',
+  };
+
+  return (
+    <ThemeProvider>
+      <div style={{ textAlign: 'center', marginTop: '10px' }}>
+        <h1 style={{ borderBottom: '2px solid orange', color: 'blue' }}>All Hooks @ Once</h1>
+      </div>
+      <div style={appStyle}>
+        <CounterComponent />
+        <ThemedComponent />
+        <UserInfoComponent />
+      </div>
+    </ThemeProvider>
+  );
+};
+
+export default App;
+
+
+=================
+====================
+====================
+
+App.css
+-----------------------------
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+==================
+=========================
+=============================
+index.css
+---------------------------
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
